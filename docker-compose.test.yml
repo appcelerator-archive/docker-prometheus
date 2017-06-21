@@ -3,4 +3,4 @@ services:
   sut:
     build: .
     image: appcelerator/prometheus
-    command ["-version"]
+    command: ["-version"]
