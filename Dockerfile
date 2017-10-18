@@ -1,6 +1,6 @@
 FROM appcelerator/alpine:3.6.0
 
-ENV PROMETHEUS_VERSION 1.7.1
+ENV PROMETHEUS_VERSION 1.8.0
 
 RUN apk update && apk upgrade && \
     apk --virtual build-deps add build-base openssl git gcc musl musl-dev make binutils patch go && \
