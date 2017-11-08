@@ -1,10 +1,23 @@
 FROM appcelerator/alpine:3.6.0
 
-ENV PROMETHEUS_VERSION 1.8.2
+ENV PROMETHEUS_VERSION 2.0.0
+
+ENV GOLANG_VERSION 1.9.2
+ENV GOLANG_SRC_URL https://storage.googleapis.com/golang/go$GOLANG_VERSION.src.tar.gz
+ENV GOLANG_SRC_SHA256 665f184bf8ac89986cfd5a4460736976f60b57df6b320ad71ad4cef53bb143dc
 
 RUN apk update && apk upgrade && \
     apk --virtual build-deps add build-base openssl git gcc musl musl-dev make binutils patch go && \
+    echo "Installing Go" && \
+    export GOROOT_BOOTSTRAP="$(go env GOROOT)" && \
+    wget -q "$GOLANG_SRC_URL" -O golang.tar.gz && \
+    echo "$GOLANG_SRC_SHA256  golang.tar.gz" | sha256sum -c - && \
+    tar -C /usr/local -xzf golang.tar.gz && \
+    rm golang.tar.gz && \
+    cd /usr/local/go/src && \
+    ./make.bash && \
     export GOPATH=/go && \
+    export PATH=/usr/local/go/bin:$PATH && \
     go version && \
     mkdir -p /go/src/github.com/prometheus && cd /go/src/github.com/prometheus && \
     git clone https://github.com/prometheus/prometheus.git -b v${PROMETHEUS_VERSION} && \
@@ -16,7 +29,7 @@ RUN apk update && apk upgrade && \
     cp -pr consoles/ /usr/share/prometheus/ && \
     mkdir /etc/prometheus && \
     ln -s /usr/share/prometheus/console_libraries /usr/share/prometheus/consoles/ /etc/prometheus/ && \
-    apk del build-deps && cd / && rm -rf /var/cache/apk/* $GOPATH
+    apk del build-deps && cd / && rm -rf /var/cache/apk/* /usr/local/go $GOPATH
 
 COPY config/prometheus.yml  /etc/prometheus/prometheus.yml
 
