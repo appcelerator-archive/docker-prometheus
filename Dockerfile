@@ -1,4 +1,4 @@
-FROM appcelerator/alpine:3.6.0
+FROM appcelerator/alpine:3.7.0
 
 ENV PROMETHEUS_VERSION 2.0.0
 
@@ -36,7 +36,7 @@ COPY config/prometheus.yml  /etc/prometheus/prometheus.yml
 EXPOSE     9090
 VOLUME     [ "/prometheus" ]
 WORKDIR    /prometheus
-ENTRYPOINT [ "/bin/prometheus" ]
+ENTRYPOINT [ "/sbin/tini", "--", "/bin/prometheus" ]
 CMD        [ "-config.file=/etc/prometheus/prometheus.yml", \
              "-storage.local.path=/prometheus", \
              "-web.console.libraries=/usr/share/prometheus/console_libraries", \
