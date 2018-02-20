@@ -1,10 +1,10 @@
 FROM appcelerator/alpine:3.7.0
 
-ENV PROMETHEUS_VERSION 2.1.0
+ENV PROMETHEUS_VERSION 2.2.0-rc.0
 
-ENV GOLANG_VERSION 1.9.2
+ENV GOLANG_VERSION 1.10
 ENV GOLANG_SRC_URL https://storage.googleapis.com/golang/go$GOLANG_VERSION.src.tar.gz
-ENV GOLANG_SRC_SHA256 665f184bf8ac89986cfd5a4460736976f60b57df6b320ad71ad4cef53bb143dc
+ENV GOLANG_SRC_SHA256 f3de49289405fda5fd1483a8fe6bd2fa5469e005fd567df64485c4fa000c7f24
 
 RUN apk update && apk upgrade && \
     apk --virtual build-deps add build-base openssl git gcc musl musl-dev make binutils patch go && \
@@ -29,7 +29,7 @@ RUN apk update && apk upgrade && \
     cp -pr consoles/ /usr/share/prometheus/ && \
     mkdir /etc/prometheus && \
     ln -s /usr/share/prometheus/console_libraries /usr/share/prometheus/consoles/ /etc/prometheus/ && \
-    apk del build-deps && cd / && rm -rf /var/cache/apk/* /usr/local/go $GOPATH
+    apk del build-deps && cd / && rm -rf /var/cache/apk/* /usr/local/go /root/.cache $GOPATH
 
 COPY config/prometheus.yml  /etc/prometheus/prometheus.yml
 
