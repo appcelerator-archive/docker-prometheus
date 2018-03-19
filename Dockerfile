@@ -1,6 +1,6 @@
 FROM appcelerator/alpine:3.7.0
 
-ENV PROMETHEUS_VERSION 2.2.0-rc.1
+ENV PROMETHEUS_VERSION 2.2.1
 
 ENV GOLANG_VERSION 1.10
 ENV GOLANG_SRC_URL https://storage.googleapis.com/golang/go$GOLANG_VERSION.src.tar.gz
